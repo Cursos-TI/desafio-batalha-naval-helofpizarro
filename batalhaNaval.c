@@ -22,6 +22,16 @@ int main() {
     matriz[5][4] = 3;
     matriz[6][4] = 3;
 
+
+    matriz[1][1] = 3;
+    matriz[2][2] = 3;
+    matriz[3][3] = 3;
+
+
+    matriz[1][10] = 3;
+    matriz[2][9]  = 3;
+    matriz[3][8]  = 3;
+
     // Impressão da matriz com rótulos
     printf("   ");
     for (int j = 0; j < 10; j++) {
