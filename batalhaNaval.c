@@ -75,3 +75,91 @@ int main() {
 
     return 0;
 }
+
+
+#include <stdio.h>
+
+#define TAM 11
+
+int main() {
+    char letras[10] = {'A','B','C','D','E','F','G','H','I','J'};
+    int tabuleiro[TAM][TAM] = {0};  // Tabuleiro 10x10 com borda extra para facilitar índices
+
+    // ====== POSICIONA NAVIO (valor 1) ======
+    for (int i = 1; i <= 3; i++) {
+        tabuleiro[i][1] = 1;  // Navio vertical na coluna A (1)
+    }
+
+    // ====== CONE (valor 2) ======
+    int centro_linha_cone = 2;
+    int centro_coluna_cone = 5;
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -2; j <= 2; j++) {
+            int abs_i = i < 0 ? -i : i;
+            int abs_j = j < 0 ? -j : j;
+            if (abs_i + abs_j <= 2) {
+                int linha = centro_linha_cone + i;
+                int coluna = centro_coluna_cone + j;
+                if (linha > 0 && linha < TAM && coluna > 0 && coluna < TAM) {
+                    if (tabuleiro[linha][coluna] == 0) {
+                        tabuleiro[linha][coluna] = 2;
+                    }
+                }
+            }
+        }
+    }
+
+    // ====== OCTAEDRO (valor 3) ======
+    int centro_linha_octa = 6;
+    int centro_coluna_octa = 3;
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            int abs_i = i < 0 ? -i : i;
+            int abs_j = j < 0 ? -j : j;
+            if (abs_i + abs_j <= 1) {
+                int linha = centro_linha_octa + i;
+                int coluna = centro_coluna_octa + j;
+                if (linha > 0 && linha < TAM && coluna > 0 && coluna < TAM) {
+                    if (tabuleiro[linha][coluna] == 0) {
+                        tabuleiro[linha][coluna] = 3;
+                    }
+                }
+            }
+        }
+    }
+
+    // ====== CRUZ (valor 4) ======
+    int centro_linha_cruz = 8;
+    int centro_coluna_cruz = 8;
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -2; j <= 2; j++) {
+            if (i == 0 || j == 0) {
+                int linha = centro_linha_cruz + i;
+                int coluna = centro_coluna_cruz + j;
+                if (linha > 0 && linha < TAM && coluna > 0 && coluna < TAM) {
+                    if (tabuleiro[linha][coluna] == 0) {
+                        tabuleiro[linha][coluna] = 4;
+                    }
+                }
+            }
+        }
+    }
+
+    // ====== IMPRESSÃO DO TABULEIRO FINAL ======
+    printf("\n=== TABULEIRO FINAL (sem sobreposição) ===\n");
+    printf("   ");
+    for (int j = 0; j < 10; j++) {
+        printf(" %c ", letras[j]);
+    }
+    printf("\n");
+
+    for (int i = 1; i <= 10; i++) {
+        printf("%2d ", i);
+        for (int j = 1; j <= 10; j++) {
+            printf(" %d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
