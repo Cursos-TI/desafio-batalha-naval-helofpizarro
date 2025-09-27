@@ -76,77 +76,66 @@ int main() {
     return 0;
 }
 
-
 #include <stdio.h>
-
-#define TAM 11
 
 int main() {
     char letras[10] = {'A','B','C','D','E','F','G','H','I','J'};
-    int tabuleiro[TAM][TAM] = {0};  // Tabuleiro 10x10 com borda extra para facilitar índices
+    int matriz[11][11] = {0};  // Zera tudo
 
-    // ====== POSICIONA NAVIO (valor 1) ======
-    for (int i = 1; i <= 3; i++) {
-        tabuleiro[i][1] = 1;  // Navio vertical na coluna A (1)
-    }
+    // Posiciona navios
+    matriz[1][1] = 1; // Navio 1 (vertical)
+    matriz[2][1] = 1;
+    matriz[3][1] = 1;
 
-    // ====== CONE (valor 2) ======
-    int centro_linha_cone = 2;
-    int centro_coluna_cone = 5;
-    for (int i = -1; i <= 1; i++) {
-        for (int j = -2; j <= 2; j++) {
-            int abs_i = i < 0 ? -i : i;
-            int abs_j = j < 0 ? -j : j;
-            if (abs_i + abs_j <= 2) {
-                int linha = centro_linha_cone + i;
-                int coluna = centro_coluna_cone + j;
-                if (linha > 0 && linha < TAM && coluna > 0 && coluna < TAM) {
-                    if (tabuleiro[linha][coluna] == 0) {
-                        tabuleiro[linha][coluna] = 2;
-                    }
-                }
-            }
+    // Matrizes para habilidades especiais 5x5
+    int cone[5][5] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {1, 1, 1, 1, 1},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
+
+    int octaedro[5][5] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
+
+    int cruz[5][5] = {
+        {0, 0, 1, 0, 0},
+        {1, 1, 1, 1, 1},
+        {0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
+
+    // Coloca as habilidades no tabuleiro principal
+    // Coloca o cone no canto superior esquerdo
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            matriz[i + 1][j + 1] = cone[i][j];
         }
     }
 
-    // ====== OCTAEDRO (valor 3) ======
-    int centro_linha_octa = 6;
-    int centro_coluna_octa = 3;
-    for (int i = -1; i <= 1; i++) {
-        for (int j = -1; j <= 1; j++) {
-            int abs_i = i < 0 ? -i : i;
-            int abs_j = j < 0 ? -j : j;
-            if (abs_i + abs_j <= 1) {
-                int linha = centro_linha_octa + i;
-                int coluna = centro_coluna_octa + j;
-                if (linha > 0 && linha < TAM && coluna > 0 && coluna < TAM) {
-                    if (tabuleiro[linha][coluna] == 0) {
-                        tabuleiro[linha][coluna] = 3;
-                    }
-                }
-            }
+    // Coloca o octaedro no canto superior direito
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            matriz[i + 1][j + 6] = octaedro[i][j];
         }
     }
 
-    // ====== CRUZ (valor 4) ======
-    int centro_linha_cruz = 8;
-    int centro_coluna_cruz = 8;
-    for (int i = -1; i <= 1; i++) {
-        for (int j = -2; j <= 2; j++) {
-            if (i == 0 || j == 0) {
-                int linha = centro_linha_cruz + i;
-                int coluna = centro_coluna_cruz + j;
-                if (linha > 0 && linha < TAM && coluna > 0 && coluna < TAM) {
-                    if (tabuleiro[linha][coluna] == 0) {
-                        tabuleiro[linha][coluna] = 4;
-                    }
-                }
-            }
+    // Coloca a cruz no canto inferior esquerdo
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            matriz[i + 6][j + 1] = cruz[i][j];
         }
     }
 
-    // ====== IMPRESSÃO DO TABULEIRO FINAL ======
-    printf("\n=== TABULEIRO FINAL (sem sobreposição) ===\n");
+    // Impressão da matriz principal com navios e habilidades
+    printf("\n=== TABULEIRO COM NAVIOS E HABILIDADES ===\n");
     printf("   ");
     for (int j = 0; j < 10; j++) {
         printf(" %c ", letras[j]);
@@ -156,7 +145,7 @@ int main() {
     for (int i = 1; i <= 10; i++) {
         printf("%2d ", i);
         for (int j = 1; j <= 10; j++) {
-            printf(" %d ", tabuleiro[i][j]);
+            printf(" %d ", matriz[i][j]);
         }
         printf("\n");
     }
